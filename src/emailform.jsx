@@ -62,27 +62,27 @@ export default function EmailForm() {
 
   const downloadsPath = "C:\Users\This_user\Downloads";
 
-const generateAndDownloadEMLFiles = async () => {
-  for (let i = 0; i < recipients.length; i++) {
-    const emlContent = await createEMLWithAttachment(recipients[i], subject, body, file);
+  const generateAndDownloadEMLFiles = async () => {
+    for (let i = 0; i < recipients.length; i++) {
+      const emlContent = await createEMLWithAttachment(recipients[i], subject, body, file);
 
-    const safeTo = recipients[i].replace(/[^a-z0-9]/gi, '_').toLowerCase();
-    const safeSubject = subject.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-    const dateStr = new Date().toISOString().split('T')[0];
+      const safeTo = recipients[i].replace(/[^a-z0-9]/gi, '_').toLowerCase();
+      const safeSubject = subject.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+      const dateStr = new Date().toISOString().split('T')[0];
 
-    const filename = `${safeTo}_${safeSubject}_${dateStr}.eml`;
+      const filename = `${safeTo}_${safeSubject}_${dateStr}.eml`;
 
-    downloadEML(emlContent, filename);
+      downloadEML(emlContent, filename);
 
-    await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise(resolve => setTimeout(resolve, 3000));
 
-    const fullPath = `C:\\Users\\This_user\\Downloads\\${filename}`;
+      const fullPath = `C:\\Users\\This_user\\Downloads\\${filename}`;
 
-    await openSingleEMLFileInElectron(fullPath);
-  }
-};
-    
+      await openSingleEMLFileInElectron(fullPath);
+    }
+  };
 
+  
   const handleSubmit = () => {
     if (
       recipients.some((r) => r.trim() === '' || !isValidEmail(r.trim())) ||

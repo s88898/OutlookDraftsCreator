@@ -1,7 +1,7 @@
 
 export const openSingleEMLFileInElectron = async (fullPath) => {
   try {
-    const encodedPath = encodeURIComponent(fullPath); // בלי שינוי הסלאשים
+    const encodedPath = encodeURIComponent(fullPath); 
     const response = await fetch(`http://localhost:4567/open?file=${encodedPath}`);
     if (!response.ok) throw new Error('Failed to open file in Outlook');
     const text = await response.text();
@@ -10,6 +10,7 @@ export const openSingleEMLFileInElectron = async (fullPath) => {
     console.error('Error opening file in Electron:', err);
   }
 };
+
 const fileToBase64 = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -30,6 +31,7 @@ export const createEMLWithAttachment = async (to, subject, body, file) => {
 
   return `To: ${to}
 Subject: ${subject}
+X-Unsent: 1
 MIME-Version: 1.0
 Content-Type: multipart/mixed; boundary="${boundary}"
 
@@ -47,7 +49,6 @@ Content-Disposition: attachment; filename="${file.name}"
 ${base64File}
 --${boundary}--`;
 };
-
 
 export const downloadEML = (content, filename) => {
   const blob = new Blob([content], { type: 'message/rfc822' });

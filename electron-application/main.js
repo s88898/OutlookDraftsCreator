@@ -58,11 +58,9 @@ app.whenReady().then(() => {
 
       console.log('Valid file path:', filePath);
 
-      
-      const outlookPath = path.join('C:', 'ProgramData', 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Outlook.lnk');
+      const outlookPath = `"C:\\Program Files (x86)\\Microsoft Office\\root\\Office16\\OUTLOOK.EXE"`;
 
-      
-      exec(`"${outlookPath}" "${filePath}"`, (error, stdout, stderr) => {
+      exec(`${outlookPath} "${filePath}"`, (error, stdout, stderr) => {
         if (error) {
           console.error('Failed to open Outlook:', error);
           res.writeHead(500);
