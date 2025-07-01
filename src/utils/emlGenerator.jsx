@@ -1,3 +1,15 @@
+
+export const openSingleEMLFileInElectron = async (fullPath) => {
+  try {
+    const encodedPath = encodeURIComponent(fullPath); // בלי שינוי הסלאשים
+    const response = await fetch(`http://localhost:4567/open?file=${encodedPath}`);
+    if (!response.ok) throw new Error('Failed to open file in Outlook');
+    const text = await response.text();
+    console.log('Electron response:', text);
+  } catch (err) {
+    console.error('Error opening file in Electron:', err);
+  }
+};
 const fileToBase64 = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -11,7 +23,6 @@ const fileToBase64 = (file) => {
   });
 };
 
-//
 export const createEMLWithAttachment = async (to, subject, body, file) => {
   const boundary = "----=_NextPart_" + Date.now();
 
@@ -46,6 +57,6 @@ export const downloadEML = (content, filename) => {
   a.href = url;
   a.download = filename;
   a.click();
-
+ 
   URL.revokeObjectURL(url);
 };

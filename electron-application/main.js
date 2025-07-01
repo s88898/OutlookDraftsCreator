@@ -17,10 +17,20 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  console.log("electron");
   createWindow();
 
   const server = http.createServer((req, res) => {
     const parsedUrl = url.parse(req.url, true);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    if (req.method === 'OPTIONS') {
+      res.writeHead(200);
+      res.end();
+      return;
+    }
 
     if (parsedUrl.pathname === '/open') {
       const filePath = parsedUrl.query.file;
@@ -48,7 +58,11 @@ app.whenReady().then(() => {
 
       console.log('Valid file path:', filePath);
 
-      exec(`start outlook.exe "${filePath}"`, (error, stdout, stderr) => {
+      
+      const outlookPath = path.join('C:', 'ProgramData', 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Outlook.lnk');
+
+      
+      exec(`"${outlookPath}" "${filePath}"`, (error, stdout, stderr) => {
         if (error) {
           console.error('Failed to open Outlook:', error);
           res.writeHead(500);
